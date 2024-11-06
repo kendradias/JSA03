@@ -5,3 +5,13 @@
     margin: 0;
     padding: 0;
 }
+
+/* Main Content Styles */
+main {
+    height: 100vh;
+    max-width: 800px;
+    border-radius: 40px;
+    background-color: aliceblue;
+    background-size: cover;
+    color:rgb(65, 103, 103);
+}
