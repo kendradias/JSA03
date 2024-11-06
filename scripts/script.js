@@ -2,6 +2,7 @@
 
 const game = {
     isRunning: false,
+    isPaused: false,
     loopDuration: 100,
     totalTime: 30000,
     timeRemaining: 3000,
@@ -16,12 +17,18 @@ const game = {
     resetTimer() {
         this.timeRemaining = this.totalTime;
         this.updateClock();
+        this.updateVisualMeter();
     },
     startTimer() {
-        //update visual display to indicate timer is active 
-        //initiate timer loop that invokes a callback function every 100 milliseconds
+        //only reset timer if not paused 
         if (!this.isRunning) {
+            if (!this.isPaused) {
+                this.resetTimer();
+            }
             this.isRunning = true;
+            this.isPaused = false;
+            //update visual display to indicate timer is active 
+            //initiate timer loop that invokes a callback function every 100 milliseconds
             this.updateVisualMeter();
             this.intervalId = setInterval(() => this.runTimerLoop(), this.loopDuration);
         }
@@ -29,6 +36,7 @@ const game = {
     pauseTimer() {
         //toggle game state
         this.isRunning = !this.isRunning;
+        this.isPaused = true;
         //clear interval timing loop
         clearInterval(this.intervalId);
         //call update method to remove visual indication that timer is active
@@ -85,7 +93,6 @@ const game = {
 //start button
 $('#start-btn').on('click', () => {
     game.totalTime = parseInt($('#duration-select').val());
-    game.resetTimer();
     game.startTimer();
 });
 
@@ -96,5 +103,6 @@ $('#pause-btn').on('click', () => {
 
 //reset button
 $('#reset-btn').on('click', () => {
+    game.isPaused = false; //clear pause state on reset
     game.resetTimer();
 });
