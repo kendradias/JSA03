@@ -6,6 +6,12 @@
     padding: 0;
 }
 
+#time-display {
+    font-size: 30px;
+    background-color: rgb(215, 234, 252);
+}
+
+
 /* Main Content Styles */
 main {
     height: 100vh;

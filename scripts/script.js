@@ -27,10 +27,11 @@ const game = {
         }
     },
     pauseTimer() {
-        //call update method to remove visual indication that timer is active
+        //toggle game state
+        this.isRunning = !this.isRunning;
         //clear interval timing loop
-        isRunning = false;
         clearInterval(this.intervalId);
+        //call update method to remove visual indication that timer is active
         this.updateVisualMeter();
     },
     updateVisualMeter() {
@@ -76,3 +77,20 @@ const game = {
 };
 
 // EVENT LISTENERS
+
+//start button
+$('#start-btn').on('click', () => {
+    game.totalTime = parseInt($('#duration-select').val());
+    game.resetTimer();
+    game.startTimer();
+});
+
+//pause button
+$('#pause-btn').on('click', () => {
+    game.pauseTimer();
+});
+
+//reset button
+$('#reset-btn').on('click', () => {
+    game.resetTimer();
+});
