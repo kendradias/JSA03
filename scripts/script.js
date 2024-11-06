@@ -2,53 +2,77 @@
 
 const game = {
     isRunning: false,
-    loopDuration: null,
-    totalTime: null,
-    timeRemaining: null,
+    loopDuration: 100,
+    totalTime: 30000,
+    timeRemaining: 3000,
     intervalId: null,
+    $timeDisplay: $('#time-display'),
+    $progressBar: $('#progress-bar'),
     //requestAnimationFrame: null,
     
     //METHODS
 
     //resets time remaining equal to total time property
-    resetTimer: function() {
-        timeRemaining = this.totalTime;
-        //return this.totalTime;
+    resetTimer() {
+        this.timeRemaining = this.totalTime;
+        this.updateClock();
     },
-    startTimer: function() {
-        isRunning = true;
+    startTimer() {
         //update visual display to indicate timer is active 
         //initiate timer loop that invokes a callback function every 100 milliseconds
+        if (!this.isRunning) {
+            this.isRunning = true;
+            this.updateVisualMeter();
+            this.intervalId = setInterval(() => this.runTimerLoop(), this.loopDuration);
+        }
     },
-    pauseTimer: function() {
-        isRunning = false;
-        //remove visual indication that timer is active
+    pauseTimer() {
+        //call update method to remove visual indication that timer is active
         //clear interval timing loop
+        isRunning = false;
+        clearInterval(this.intervalId);
+        this.updateVisualMeter();
     },
-    updateVisualMeter: function() {
+    updateVisualMeter() {
+        //initialize progress variable and update progress bar 
+        const progress = (this.timeRemaining / this.totalTime) * 100;
+        this.$progressBar.css('width', `${progress}%`);
+
         //update width of the visual meter to reflect % of totalTime remaining
-        if (this.timeRemaining > 50% this.totalTime) {
+        if (progress > 50) {
             // set color to green
         } 
-        else if (this.timeRemaining <= 50% this.totalTime) {
+        else if (progress <= 50) {
             //set color to orange/yellow
         }
-        else if (this.timeRemaining <= 25% this.totalTime) {
+        else if (progress <= 25) {
             //set color to red
         }
     },
-    updateClock: function() {
-        //read time remaining property
-        //parse out minutes, seconds, tenths
-        //update numeric display accordingly
+    updateClock() {
+        //read time remaining property, parse out minutes, seconds, tenths
+        const minutes = Math.floor(this.timeRemaining / 60000);
+        const seconds = Math.floor((this.timeRemaining % 60000) / 1000);
+        const tenths = Math.floor((this.timeRemaining % 1000) / 100);
+        //display time 
+        this.$timeDisplay.text(`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${tenths}`);
     },
-    runTimerLoop: function () {
+    runTimerLoop() {
         //decrement time remaining by loop duration
+        this.timeRemaining -= this.loopDuration;
         //check if time remaining is less than loop duration
         if (this.timeRemaining < this.loopDuration) {
             //stop the loop
-            //deactivate visual meter
-            //set numeric display to --:--.-
+            clearInterval(this.intervalId);
+            this.isrunning = false;
+            //deactivate visual meter, set numeric display to --:--.-
+            this.$progressBar.css('width', '0%');
+            this.$timeDisplay.text('--:--:-');
+        } else {
+            this.updateVisualMeter();
+            this.updateClock();
         }
     }
-}
+};
+
+// EVENT LISTENERS
