@@ -40,15 +40,19 @@ const game = {
         this.$progressBar.css('width', `${progress}%`);
 
         //update width of the visual meter to reflect % of totalTime remaining
-        if (progress > 50) {
-            // set color to green
-        } 
+        if (progress <= 25) {
+            //set color to red
+            this.$progressBar.removeClass('bg-success bg-warning').addClass('bg-danger');
+        }
         else if (progress <= 50) {
             //set color to orange/yellow
+            this.$progressBar.removeClass('bg-success bg-danger').addClass('bg-warning');
         }
-        else if (progress <= 25) {
-            //set color to red
-        }
+        else {
+            //set color to green
+            this.$progressBar.removeClass('bg-warning bg-danger').addClass('bg-success');
+        } 
+
     },
     updateClock() {
         //read time remaining property, parse out minutes, seconds, tenths
