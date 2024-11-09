@@ -16,6 +16,14 @@ header {
 }
 
 
+.card-body {
+    padding: 20px 0px 20px 5px;
+}
+
+.buttons {
+    gap: 10px
+}
+
 /* Main Content Styles */
 main {
     height: 100vh;
